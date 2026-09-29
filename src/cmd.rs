@@ -1,3 +1,4 @@
+use crate::commands::project::handle_project;
 use anyhow::Result;
 use pathsearch::find_executable_in_path;
 use std::process::Command;
@@ -16,7 +17,7 @@ impl ShellCommand {
     }
 
     pub fn eval_command(&self) -> Result<()> {
-        let known_commands = ["exit", "echo", "type", "pwd", "cd"];
+        let known_commands = ["exit", "echo", "type", "pwd", "cd", "project"];
 
         if known_commands.contains(&self.cmd.as_str()) {
             match self.cmd.as_str() {
@@ -55,6 +56,12 @@ impl ShellCommand {
                     if let Err(_) = std::env::set_current_dir(&target) {
                         println!("cd: {}: No such file or directory", target);
                     }
+                }
+                "project" => {
+                    // Handle the "project" command
+                    // You can implement your logic for handling the "project" command here
+                    println!("Handling 'project' command with args: {:?}", self.args);
+                    handle_project(&self.args);
                 }
                 "exit" => {
                     return Ok(());

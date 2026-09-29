@@ -1,4 +1,6 @@
+mod args;
 mod cmd;
+mod commands;
 mod parsing;
 use cmd::ShellCommand;
 use parsing::ParserInput;
