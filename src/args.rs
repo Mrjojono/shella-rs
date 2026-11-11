@@ -16,9 +16,7 @@ pub fn parse_args(args: &[String]) -> ParsedArgs {
     while i < args.len() {
         let arg = &args[i];
 
-        if arg.starts_with("--") {
-            let name = &arg[2..];
-
+        if let Some(name) = arg.strip_prefix("--") {
             if i + 1 < args.len() && !args[i + 1].starts_with('-') {
                 options.insert(name.to_string(), args[i + 1].clone());
                 i += 2;

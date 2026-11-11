@@ -1,21 +1,12 @@
-use std::fs::File;
-use std::io::{self, BufRead, BufReader};
+use std::io;
 
 fn show_help() -> io::Result<()> {
-    let help_file_path = File::open("../utils/help.txt");
+    // Contenu embarqué dans le binaire à la compilation.
+    // Chemin relatif à ce fichier (src/commands/help.rs -> src/utils/help.txt)
+    let contenu = include_str!("../utils/help.txt");
 
-    let fichier = match help_file_path {
-        Ok(f) => f,
-        Err(e) => {
-            eprintln!("Error: Could not open help file: {}", e);
-            return Err(e);
-        }
-    };
-
-    let lecteur = BufReader::new(fichier);
-
-    for ligne in lecteur.lines() {
-        println!("{}", ligne?);
+    for ligne in contenu.lines() {
+        println!("{}", ligne);
     }
 
     Ok(())

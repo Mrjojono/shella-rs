@@ -6,5 +6,15 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.68"                                # error handling
 bytes = "1.3.0"                                  # helps manage buffers
+dirs = "7.0.0"
 pathsearch = "0.2.0"
+serde = { version = "1.0.229", features = ["derive"] }
 thiserror = "1.0.38"                             # error handling
+toml = "1.2.1"
+
+# Signale les morceaux de code non terminés au lieu de les laisser passer en silence.
+# Ces lints sont dans le groupe "restriction" de Clippy (allow-by-default) :
+# il faut les activer explicitement, sinon rien ne signale un todo!() oublié.
+[lints.clippy]
+todo = "warn"
+unimplemented = "warn"

@@ -1,19 +1,22 @@
 use crate::commands::help::handle_help;
 use crate::commands::project::handle_project;
+use crate::config::Config;
 use anyhow::Result;
 use pathsearch::find_executable_in_path;
 use std::process::Command;
 
-pub struct ShellCommand {
+pub struct ShellCommand<'a> {
     cmd: String,
     args: Vec<String>,
+    config: &'a Config,
 }
 
-impl ShellCommand {
-    pub fn new(cmd: &str, args: &[String]) -> Self {
+impl<'a> ShellCommand<'a> {
+    pub fn new(cmd: &str, args: &[String], config: &'a Config) -> Self {
         Self {
             cmd: cmd.to_string(),
             args: args.to_vec(),
+            config,
         }
     }
 
@@ -34,7 +37,7 @@ impl ShellCommand {
                         if known_commands.contains(&arg.as_str()) {
                             println!("{} is a shell builtin", arg);
                         } else if let Some(path) = find_executable_in_path(&self.args[0]) {
-                            println!("{} is {}", &self.args[0], path.display());
+                            println!("{} is {}", self.args[0], path.display());
                         } else {
                             println!("{}: not found", arg);
                         }
@@ -54,18 +57,14 @@ impl ShellCommand {
                         self.args[0].clone()
                     };
 
-                    if let Err(_) = std::env::set_current_dir(&target) {
+                    if std::env::set_current_dir(&target).is_err() {
                         println!("cd: {}: No such file or directory", target);
                     }
                 }
                 "project" => {
-                    // Handle the "project" command
-                    // You can implement your logic for handling the "project" command here
-                    println!("Handling 'project' command with args: {:?}", self.args);
-                    handle_project(&self.args);
+                    handle_project(&self.args, self.config)?;
                 }
                 "help" => {
-                    //handle the "help" command
                     handle_help(&self.args);
                 }
                 "exit" => {
@@ -78,7 +77,7 @@ impl ShellCommand {
             return Ok(());
         }
 
-        // execution de commande externe
+        // exécution de commande externe
         let result = Command::new(&self.cmd).args(&self.args).spawn();
 
         match result {

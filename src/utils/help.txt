@@ -1,0 +1,7 @@
+Commandes disponibles :
+  help list   Affiche cette aide
+  echo <txt>  Affiche du texte
+  pwd         Affiche le dossier courant
+  cd <dir>    Change de dossier
+  type <cmd>  Indique si c'est un builtin ou un externe
+  exit        Quitte le shell
